@@ -47,21 +47,29 @@ int main(int argc,char* argv[])
 	}  
 	while(1)
 	{
-		char sendBuf[1024] ="123456789";	
-		err = send(sockClt,sendBuf,strlen(sendBuf)+1,0);  
+		char dataBuf[1024] ="123456789";
+		char sendBuf[1024]={0};
+		int length = strlen(dataBuf);
+		memcpy(sendBuf, &length,sizeof(int));
+		memcpy(sendBuf+sizeof(int), dataBuf,strlen(dataBuf)+1);
+		err = send(sockClt,sendBuf,strlen(dataBuf)+sizeof(int),0);  
 
 		char recvBuf[1024]="\0";  
 		iLen = recv(sockClt,recvBuf,1024,0);  
 		if(iLen ==0)  
-		return -3;  
+			return -3;  
 		else if(iLen==SOCKET_ERROR){  
-		cout<<"recv() fail:"<<WSAGetLastError()<<endl;  
-		return -4;  
+			cout<<"recv() fail:"<<WSAGetLastError()<<endl;  
+			return -4;  
 		}  
 		else  
 		{  
-		recvBuf[iLen] = '\0';  
-		cout<<recvBuf<<endl;  
+			int nLength = 0;
+			memcpy(&nLength, recvBuf,4);
+			char dataBuff[1024]={0};
+			cout<<"datalength: "<< nLength<<endl;
+			memcpy(dataBuff, recvBuf+4, nLength) ;
+			cout <<"recv data is: "<< dataBuff <<endl;
 		}  
 	}
 	closesocket(sockClt);  
