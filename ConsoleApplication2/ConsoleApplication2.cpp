@@ -10,7 +10,7 @@ using namespace std;
 #pragma comment(lib, "ws2_32.lib")          //add ws2_32.lib  
 
 
-const int DEFAULT_PORT = 13695;  
+const int DEFAULT_PORT = 8898;  
 int main(int argc,char* argv[])  
 {  
 
@@ -34,7 +34,8 @@ int main(int argc,char* argv[])
 	//(3)IP  
 	SOCKADDR_IN addrSrv;  
 	addrSrv.sin_family = AF_INET;  
-	addrSrv.sin_addr.s_addr = inet_addr("127.0.0.1");  
+	addrSrv.sin_addr.s_addr = inet_addr("127.0.0.1");
+	//addrSrv.sin_addr.s_addr = inet_addr("192.168.3.132");
 	addrSrv.sin_port = htons(DEFAULT_PORT);  
 
 	//(5)connect  
@@ -70,6 +71,8 @@ int main(int argc,char* argv[])
 			cout<<"datalength: "<< nLength<<endl;
 			memcpy(dataBuff, recvBuf+4, nLength) ;
 			cout <<"recv data is: "<< dataBuff <<endl;
+		//	closesocket(sockClt);
+			//break;
 		}  
 	}
 	closesocket(sockClt);  
