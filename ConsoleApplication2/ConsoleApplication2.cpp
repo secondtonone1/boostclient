@@ -49,6 +49,7 @@ int main(int argc,char* argv[])
 	int i =0;
 	while(1)
 	{
+		Sleep(1);
 		char dataBuf[1024] ="123456789";
 		char sendBuf[1024]={0};
 		int length = strlen(dataBuf);
@@ -60,10 +61,10 @@ int main(int argc,char* argv[])
 		char recvBuf[1024]="\0";  
 		iLen = recv(sockClt,recvBuf,1024,0);  
 		if(iLen ==0)  
-			return -3;  
+			break;  
 		else if(iLen==SOCKET_ERROR){  
 			cout<<"recv() fail:"<<WSAGetLastError()<<endl;  
-			return -4;  
+			break ;  
 		}  
 		else  
 		{  
