@@ -49,12 +49,12 @@ int main(int argc,char* argv[])
 	int i =0;
 	while(1)
 	{
-		Sleep(1);
 		char dataBuf[1024] ="123456789";
 		char sendBuf[1024]={0};
-		int length = strlen(dataBuf);
-		memcpy(sendBuf, &length,sizeof(int));
-		memcpy(sendBuf+sizeof(int), &i,sizeof(int));
+		int length = htonl(strlen(dataBuf));
+		int m = htonl(i);
+		memcpy(sendBuf, &m,sizeof(int));
+		memcpy(sendBuf+sizeof(int), &length,sizeof(int));
 		memcpy(sendBuf+sizeof(int)*2, dataBuf,strlen(dataBuf)+1);
 		err = send(sockClt,sendBuf,strlen(dataBuf)+sizeof(int)*2,0);  
 
@@ -68,17 +68,21 @@ int main(int argc,char* argv[])
 		}  
 		else  
 		{  
-			int nLength = 0;
-			memcpy(&nLength, recvBuf,4);
-			char dataBuff[1024]={0};
-			cout<<"datalength: "<< nLength<<endl;
 			int nMsgId = 0;
-			memcpy(&nMsgId, recvBuf+4,4);
+			memcpy(&nMsgId, recvBuf,4);
+			nMsgId = ntohl(nMsgId);
 			cout << "msgid : " << nMsgId <<endl;
-
-			memcpy(dataBuff, recvBuf+8, nLength) ;
+			int nLength = 0;
+			memcpy(&nLength, recvBuf+4,4);
+			nLength = ntohl(nLength);
+			cout<<"datalength: "<< nLength<<endl;
+			
+			char dataBuff[1024]={0};
+			memcpy(dataBuff, recvBuf+8, 1024) ;
 			cout <<"recv data is: "<< dataBuff <<endl;
 			i++;
+			if(i > 1700)
+			i=0;
 		//	closesocket(sockClt);
 			//break;
 		}  
