@@ -46,7 +46,7 @@ int main(int argc,char* argv[])
 		cout<<"connect() fail"<<WSAGetLastError()<<endl;  
 		return -1;  
 	}  
-	int i =0;
+	int i =1;
 	while(1)
 	{
 		char dataBuf[1024] ="123456789";
@@ -57,7 +57,7 @@ int main(int argc,char* argv[])
 		memcpy(sendBuf+sizeof(int), &length,sizeof(int));
 		memcpy(sendBuf+sizeof(int)*2, dataBuf,strlen(dataBuf)+1);
 		err = send(sockClt,sendBuf,strlen(dataBuf)+sizeof(int)*2,0);  
-
+		cout << "send data success : "<<dataBuf <<endl;
 		char recvBuf[1024]="\0";  
 		iLen = recv(sockClt,recvBuf,1024,0);  
 		if(iLen ==0)  
@@ -80,9 +80,9 @@ int main(int argc,char* argv[])
 			char dataBuff[1024]={0};
 			memcpy(dataBuff, recvBuf+8, 1024) ;
 			cout <<"recv data is: "<< dataBuff <<endl;
-			i++;
-			if(i > 1700)
-			i=0;
+			//i++;
+			//if(i > 1700)
+			//i=0;
 		//	closesocket(sockClt);
 			//break;
 		}  
