@@ -6,9 +6,67 @@
 
 #include <string.h>  
 using namespace std;  
-
+#define HEADSIZE 4
 #pragma comment(lib, "ws2_32.lib")          //add ws2_32.lib  
+int m_nMsgId = 0;
+int m_nMsgLen = 0;
+bool unserializeHead(char * msgHead)
+{
+	
+	m_nMsgId = 0;
+	m_nMsgLen = 0;
+	//前两个字节按位存id
+	//后两个字节按位存len
+	//0x 0000 0001  0001 0001 = 273 小端存储
 
+	for(int i = 0; i <2; i++)
+	{
+		for(int j =0; j < 8; j++)
+		{
+			if(msgHead[i]& (0x01<<j))
+				m_nMsgId+=(0x01<<j);
+		}
+		m_nMsgId = m_nMsgId <<8*(1-i);
+	}
+
+	for(int i = 2; i <HEADSIZE; i++)
+	{
+		for(int j = 0; j < 8; j++)
+		{
+			if(msgHead[i]&(0x01<<j))
+				m_nMsgLen+= (0x01<<j);
+		}
+		m_nMsgLen=m_nMsgLen <<8*(HEADSIZE-i-1);
+	}
+	return true;
+}
+
+bool serializeHead(char * pData, unsigned short nMsgId, unsigned short nMsgLen)
+{
+	//前两个字节按位存id
+	//后两个字节按位存len
+	//0x 0000 0001  0001 0001 = 273
+	for(unsigned int i =  0; i < 2; i++)
+	{
+		unsigned short nByte = (nMsgId >> 8*(1-i));
+		for(int j = 0; j < 8; j++)
+		{
+			if(nByte & (0x01 <<j) )
+				pData[i]=(pData[i]|(0x01 <<j));
+		}
+	}
+
+	for(unsigned int i=2; i <HEADSIZE; i++)
+	{
+		unsigned short nByte = (nMsgLen >> 8*(HEADSIZE-i-1));
+		for(int j=0; j<8;j++)
+		{
+			if(nByte & (0x01 <<j))
+				pData[i]=(pData[i]|(0x01 <<j));		
+		}
+	}
+	return true;
+}
 
 const int DEFAULT_PORT = 8898;  
 int main(int argc,char* argv[])  
@@ -51,11 +109,8 @@ int main(int argc,char* argv[])
 	{
 		char dataBuf[1024] ="123456789";
 		char sendBuf[1024]={0};
-		int length = htonl(strlen(dataBuf));
-		int m = htonl(i);
-		memcpy(sendBuf, &m,sizeof(int));
-		memcpy(sendBuf+sizeof(int), &length,sizeof(int));
-		memcpy(sendBuf+sizeof(int)*2, dataBuf,strlen(dataBuf)+1);
+		serializeHead(sendBuf,i,strlen(dataBuf));
+		memcpy(sendBuf+HEADSIZE, dataBuf,strlen(dataBuf)+1);
 		err = send(sockClt,sendBuf,strlen(dataBuf)+sizeof(int)*2,0);  
 		cout << "send data success : "<<dataBuf <<endl;
 		char recvBuf[1024]="\0";  
@@ -68,17 +123,11 @@ int main(int argc,char* argv[])
 		}  
 		else  
 		{  
-			int nMsgId = 0;
-			memcpy(&nMsgId, recvBuf,4);
-			nMsgId = ntohl(nMsgId);
-			cout << "msgid : " << nMsgId <<endl;
-			int nLength = 0;
-			memcpy(&nLength, recvBuf+4,4);
-			nLength = ntohl(nLength);
-			cout<<"datalength: "<< nLength<<endl;
-			
+			unserializeHead(recvBuf);
+			cout << "msgid : " << m_nMsgId <<endl;		
+			cout<<"datalength: "<< m_nMsgLen<<endl;		
 			char dataBuff[1024]={0};
-			memcpy(dataBuff, recvBuf+8, 1024) ;
+			memcpy(dataBuff, recvBuf+HEADSIZE, 1024) ;
 			cout <<"recv data is: "<< dataBuff <<endl;
 			//i++;
 			//if(i > 1700)
