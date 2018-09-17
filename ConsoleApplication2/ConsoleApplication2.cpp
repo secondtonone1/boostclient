@@ -111,7 +111,7 @@ int main(int argc,char* argv[])
 		char sendBuf[1024]={0};
 		serializeHead(sendBuf,i,strlen(dataBuf));
 		memcpy(sendBuf+HEADSIZE, dataBuf,strlen(dataBuf)+1);
-		err = send(sockClt,sendBuf,strlen(dataBuf)+sizeof(int)*2,0);  
+		err = send(sockClt,sendBuf,strlen(dataBuf)+HEADSIZE,0);  
 		cout << "send data success : "<<dataBuf <<endl;
 		char recvBuf[1024]="\0";  
 		iLen = recv(sockClt,recvBuf,1024,0);  
