@@ -146,19 +146,19 @@ int main(int argc,char* argv[])
 		return -1;  
 	} 
 	std::vector<HANDLE> vecHandle;
-	for(int i = 0; i < 2000; i++)
+	for(int i = 0; i < 10000; i++)
 	{
 		HANDLE hThread = CreateThread(NULL, 0, ThreadFunc, 0, 0, 0); // 创建线程
 		vecHandle.push_back(hThread);
+		Sleep(100);
 	}
 	
+	system("PAUSE");  
+	getchar();
 	for(int i = 0; i < vecHandle.size(); i++)
 	{
 		CloseHandle(vecHandle[i]);
 	}
-	 
-	system("PAUSE");  
-	getchar();
 	WSACleanup(); 
 	return 0;  
 }  
