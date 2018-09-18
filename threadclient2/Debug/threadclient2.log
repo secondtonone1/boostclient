@@ -1,10 +1,10 @@
-﻿生成启动时间为 2018/9/18 星期二 上午 9:46:52。
+﻿生成启动时间为 2018/9/18 星期二 下午 4:49:32。
      1>项目“D:\github\boostclient\threadclient2\threadclient2.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          F:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt threadclient2.cpp
          threadclient2.cpp
-     1>d:\github\boostclient\threadclient2\threadclient2.cpp(176): warning C4018: “<”: 有符号/无符号不匹配
-     1>d:\github\boostclient\threadclient2\threadclient2.cpp(152): warning C4101: “iLen”: 未引用的局部变量
+     1>d:\github\boostclient\threadclient2\threadclient2.cpp(172): warning C4018: “<”: 有符号/无符号不匹配
+     1>d:\github\boostclient\threadclient2\threadclient2.cpp(150): warning C4101: “iLen”: 未引用的局部变量
        Link:
          F:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\github\boostclient\Debug\threadclient2.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\github\boostclient\Debug\threadclient2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\github\boostclient\Debug\threadclient2.lib" /MACHINE:X86 Debug\stdafx.obj
          Debug\threadclient2.obj
@@ -13,4 +13,4 @@
 
 生成成功。
 
-已用时间 00:00:01.97
+已用时间 00:00:01.89

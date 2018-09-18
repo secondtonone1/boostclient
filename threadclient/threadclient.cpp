@@ -13,7 +13,8 @@ using namespace std;
 #include <vector>
 int m_nMsgId = 0;
 int m_nMsgLen = 0;
-
+#define NUMMAX  1000
+#define SLEEPTIME 500
 bool unserializeHead(char * msgHead)
 {
 
@@ -85,8 +86,8 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 	//(3)IP  
 	SOCKADDR_IN addrSrv;  
 	addrSrv.sin_family = AF_INET;  
-	addrSrv.sin_addr.s_addr = inet_addr("127.0.0.1");
-	//addrSrv.sin_addr.s_addr = inet_addr("192.168.3.132");
+	//addrSrv.sin_addr.s_addr = inet_addr("127.0.0.1");
+	addrSrv.sin_addr.s_addr = inet_addr("192.168.3.133");
 	addrSrv.sin_port = htons(DEFAULT_PORT);  
 
 	//(5)connect  
@@ -96,11 +97,12 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 	{  
 		cout<<"connect() fail"<<WSAGetLastError()<<endl;  
 		return -1;  
-	}  
+	}
+	cout << "thread  "<<*(int*)(p) << " connect success "<<endl; 
 	int i =1;
 	int count = 0;
 	long long t1= (long long)time(0);
-	while(count < 1000)
+	while(count < 100)
 	{
 		char dataBuf[1024] ="123456789";
 		char sendBuf[1024]={0};
@@ -133,7 +135,7 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 		count++;
 	}
 	long long t2= (long long)time(0);
-	
+	cout << "count :  "<< count <<endl;
 	cout << "thread  "<<*(int*)(p) << " cost seconds: "<<t2-t1<<endl;
 	closesocket(sockClt);  
 	return 0;
@@ -155,15 +157,15 @@ int main(int argc,char* argv[])
 	} 
 	std::vector<HANDLE> vecHandle;
 	vector<int> vecNum;
-	for(int i=1; i<= 2000; i++)
+	for(int i=1; i<= NUMMAX; i++)
 	{
 		vecNum.push_back(i);
 	}
-	for(int i = 0; i < 2000; i++)
+	for(int i = 0; i < NUMMAX; i++)
 	{
 		HANDLE hThread = CreateThread(NULL, 0, ThreadFunc, &vecNum[i], 0, 0); // 创建线程
 		vecHandle.push_back(hThread);
-		Sleep(500);
+		Sleep(SLEEPTIME);
 	}
 	
 	system("PAUSE");  

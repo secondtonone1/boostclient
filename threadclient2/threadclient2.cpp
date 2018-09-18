@@ -13,7 +13,7 @@ using namespace std;
 #include <vector>
 int m_nMsgId = 0;
 int m_nMsgLen = 0;
-#define NUMMAX  10000
+#define NUMMAX  1000
 #define SLEEPTIME 500
 bool unserializeHead(char * msgHead)
 {
@@ -86,8 +86,8 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 	//(3)IP  
 	SOCKADDR_IN addrSrv;  
 	addrSrv.sin_family = AF_INET;  
-	addrSrv.sin_addr.s_addr = inet_addr("127.0.0.1");
-	//addrSrv.sin_addr.s_addr = inet_addr("192.168.3.132");
+	//addrSrv.sin_addr.s_addr = inet_addr("127.0.0.1");
+	addrSrv.sin_addr.s_addr = inet_addr("192.168.3.133");
 	addrSrv.sin_port = htons(DEFAULT_PORT);  
 
 	//(5)connect  
@@ -97,7 +97,8 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 	{  
 		std::cout<<"connect() fail"<<WSAGetLastError()<<endl;  
 		return -1;  
-	}  
+	}
+	cout << "thread  "<<*(int*)(p) << " connect success "<<endl; 
 	int i =1;
 	int count = 0;
 	Sleep( (NUMMAX-*(int*)(p))*SLEEPTIME );
@@ -136,10 +137,7 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 		count++;
 	}
 	long long t2= (long long)time(0);
-	cout << "thread  "<<*(int*)(p) << " cost seconds: "<<t2-t1<<endl;
-	system("PAUSE");  
-	getchar();
-	
+	cout << "[thread  "<<*(int*)(p) << " cost seconds: "<<t2-t1<<"]"<<endl; 	
 	closesocket(sockClt);  
 	return 0;
 }
@@ -169,9 +167,7 @@ int main(int argc,char* argv[])
 		HANDLE hThread = CreateThread(NULL, 0, ThreadFunc, &vecNum[i], 0, 0); // 创建线程
 		vecHandle.push_back(hThread);
 		Sleep(SLEEPTIME);
-	}
-
-	system("PAUSE");  
+	}  
 	getchar();
 	for(int i = 0; i < vecHandle.size(); i++)
 	{
