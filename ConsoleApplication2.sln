@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication2", "Cons
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "threadclient", "threadclient\threadclient.vcxproj", "{0FEF22D8-13C9-4131-8D15-D7192968131E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "threadclient2", "threadclient2\threadclient2.vcxproj", "{8BF79CA5-031B-455A-9322-1993CDCC8379}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{0FEF22D8-13C9-4131-8D15-D7192968131E}.Debug|Win32.Build.0 = Debug|Win32
 		{0FEF22D8-13C9-4131-8D15-D7192968131E}.Release|Win32.ActiveCfg = Release|Win32
 		{0FEF22D8-13C9-4131-8D15-D7192968131E}.Release|Win32.Build.0 = Release|Win32
+		{8BF79CA5-031B-455A-9322-1993CDCC8379}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8BF79CA5-031B-455A-9322-1993CDCC8379}.Debug|Win32.Build.0 = Debug|Win32
+		{8BF79CA5-031B-455A-9322-1993CDCC8379}.Release|Win32.ActiveCfg = Release|Win32
+		{8BF79CA5-031B-455A-9322-1993CDCC8379}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

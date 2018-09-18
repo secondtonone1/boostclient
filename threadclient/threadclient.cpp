@@ -5,6 +5,8 @@
 #include <iostream>  
 
 #include <string.h>  
+#include <ctime>
+#include<atltime.h>
 using namespace std;  
 #define HEADSIZE 4
 #pragma comment(lib, "ws2_32.lib")          //add ws2_32.lib  
@@ -96,14 +98,16 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 		return -1;  
 	}  
 	int i =1;
-	while(1)
+	int count = 0;
+	long long t1= (long long)time(0);
+	while(count < 1000)
 	{
 		char dataBuf[1024] ="123456789";
 		char sendBuf[1024]={0};
 		serializeHead(sendBuf,i,strlen(dataBuf));
 		memcpy(sendBuf+HEADSIZE, dataBuf,strlen(dataBuf)+1);
 		err = send(sockClt,sendBuf,strlen(dataBuf)+HEADSIZE,0);  
-		cout << "send data success : "<<dataBuf <<endl;
+		//cout << "send data success : "<<dataBuf <<endl;
 		char recvBuf[1024]="\0";  
 		iLen = recv(sockClt,recvBuf,1024,0);  
 		if(iLen ==0)  
@@ -115,18 +119,22 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 		else  
 		{  
 			unserializeHead(recvBuf);
-			cout << "msgid : " << m_nMsgId <<endl;		
-			cout<<"datalength: "<< m_nMsgLen<<endl;		
+			//cout << "msgid : " << m_nMsgId <<endl;		
+			//cout<<"datalength: "<< m_nMsgLen<<endl;		
 			char dataBuff[1024]={0};
 			memcpy(dataBuff, recvBuf+HEADSIZE, 1024) ;
-			cout <<"recv data is: "<< dataBuff <<endl;
+			//cout <<"recv data is: "<< dataBuff <<endl;
 			//i++;
 			//if(i > 1700)
 			//i=0;
 			//	closesocket(sockClt);
 			//break;
 		}  
+		count++;
 	}
+	long long t2= (long long)time(0);
+	
+	cout << "thread  "<<*(int*)(p) << " cost seconds: "<<t2-t1<<endl;
 	closesocket(sockClt);  
 	return 0;
 }
@@ -146,11 +154,16 @@ int main(int argc,char* argv[])
 		return -1;  
 	} 
 	std::vector<HANDLE> vecHandle;
-	for(int i = 0; i < 10000; i++)
+	vector<int> vecNum;
+	for(int i=1; i<= 2000; i++)
 	{
-		HANDLE hThread = CreateThread(NULL, 0, ThreadFunc, 0, 0, 0); // 创建线程
+		vecNum.push_back(i);
+	}
+	for(int i = 0; i < 2000; i++)
+	{
+		HANDLE hThread = CreateThread(NULL, 0, ThreadFunc, &vecNum[i], 0, 0); // 创建线程
 		vecHandle.push_back(hThread);
-		Sleep(100);
+		Sleep(500);
 	}
 	
 	system("PAUSE");  
